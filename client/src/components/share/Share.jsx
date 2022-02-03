@@ -16,10 +16,24 @@ export default function Share() {
             userId: user._id,
             desc: desc.current.value,
         }
-        try {
-            axios.post("/posts", newPost)
-        } catch (err) {
+        if (file) {
+            const data = new FormData();
+            const filename = Date.now() + file.name
+            data.append("name", filename);
+            data.append("file", file);
 
+            newPost.img = filename;
+            try {
+                axios.post("/upload", data)
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        try {
+            axios.post("/posts", newPost);
+            window.location.reload();
+        } catch (err) {
+            console.log(err);
         }
     }
 
